@@ -16,7 +16,6 @@ public class GpuNoiseEngine {
     private final GpuNoiseConfig.Common config;
     private final NoiseBackend gpuBackend;
     private final NoiseBackend cpuBackend;
-    private volatile boolean terrainCompatible = true;
 
     public GpuNoiseEngine(GpuNoiseConfig.Common config) {
         this.config = config;
@@ -29,20 +28,10 @@ public class GpuNoiseEngine {
     }
 
     public NoiseBackend selectBackend() {
-        if (!terrainCompatible) {
-            return cpuBackend;
-        }
         if (config.preferGpu.get() && gpuBackend.isAvailable()) {
             return gpuBackend;
         }
         return cpuBackend;
-    }
-
-    public void setTerrainCompatible(boolean terrainCompatible) {
-        this.terrainCompatible = terrainCompatible;
-        if (!terrainCompatible) {
-            LOGGER.info("Terrain compatibility disabled; forcing CPU backend to avoid mod conflicts.");
-        }
     }
 
     public int runBenchmark() {
@@ -129,9 +118,6 @@ public class GpuNoiseEngine {
         }
 
         private boolean probe() {
-            String osName = System.getProperty("os.name", "unknown");
-            String osArch = System.getProperty("os.arch", "unknown");
-            LOGGER.info("GPU backend probe: os={} arch={} (expecting OpenCL runtime)", osName, osArch);
             try {
                 System.loadLibrary("OpenCL");
                 LOGGER.info("OpenCL library detected; GPU backend available.");

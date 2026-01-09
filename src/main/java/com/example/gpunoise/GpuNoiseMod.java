@@ -1,7 +1,6 @@
 package com.example.gpunoise;
 
 import com.example.gpunoise.config.GpuNoiseConfig;
-import com.example.gpunoise.compat.ModCompat;
 import com.example.gpunoise.gpu.GpuNoiseEngine;
 import com.example.gpunoise.worldgen.TerrainNoiseDetector;
 import net.minecraft.commands.Commands;
@@ -30,7 +29,6 @@ public class GpuNoiseMod {
 
     @SubscribeEvent
     public void onServerStarted(ServerStartedEvent event) {
-        ModCompat.logLoadedCompatMods();
         TerrainNoiseDetector.inspect(event.getServer(), engine);
     }
 

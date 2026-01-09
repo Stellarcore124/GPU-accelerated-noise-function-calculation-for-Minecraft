@@ -26,11 +26,6 @@ public final class TerrainNoiseDetector {
         }
         ChunkGenerator generator = level.getChunkSource().getGenerator();
         LOGGER.info("Detected chunk generator: {}", generator.getClass().getName());
-        boolean vanillaGenerator = generator.getClass().getName().startsWith("net.minecraft");
-        if (!vanillaGenerator) {
-            LOGGER.info("Custom chunk generator detected; GPU noise hooks remain passive to avoid mod conflicts.");
-        }
-        engine.setTerrainCompatible(vanillaGenerator);
         if (generator instanceof NoiseBasedChunkGenerator) {
             LOGGER.info("Noise-based terrain generator detected; GPU acceleration hooks ready.");
         } else {
